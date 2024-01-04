@@ -17,6 +17,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.2",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^3.0.1"
   }
 }
