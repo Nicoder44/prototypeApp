@@ -20,7 +20,7 @@ const App = () => {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <button onClick={handleClick}>
-          Dis bonjour
+          Dis bonjour mec
         </button>
         <p>{msg}</p>
       </header>
