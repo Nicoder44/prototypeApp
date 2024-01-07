@@ -3,6 +3,11 @@
 const mongoose = require('mongoose');
 const Blog = require('./blog');
 
+const findBlog = async (Id) => {
+    const reqresult = await Blog.findById(Id);
+    console.log("trouvé" + reqresult);
+}
+
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
@@ -14,12 +19,12 @@ const connectDB = async () => {
     });
 
     //const result = await blog.save(blog);
-    /*const result = await Blog.create({
+    const result = await Blog.create({
         titre: "Titre2",
         contenu: "Contenu2"
-    });*/
+    });
     
-    const result = await Blog.insertMany([
+    /*const result = await Blog.insertMany([
       {
         titre: "Mon titre",
         contenu: "Mon contenu"
@@ -28,9 +33,11 @@ const connectDB = async () => {
         titre: "Mon titre1",
         contenu: "Mon contenu1"
       }
-    ])
+    ])*/
     
     console.log(result);
+    const reqresult = await Blog.findById("659aacac68b0ba3c805f294a");
+    console.log("trouvé" + reqresult);
 
   } catch (error) {
     console.error('Erreur de connexion à MongoDB :', error);
