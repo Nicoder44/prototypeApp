@@ -4,8 +4,15 @@ const mongoose = require('mongoose');
 const Blog = require('./blog');
 
 const findBlog = async (Id) => {
+  try{
     const reqresult = await Blog.findById(Id);
-    console.log("trouvé" + reqresult);
+    console.log(reqresult);
+    return reqresult;
+  } catch(error){
+    console.error('Erreur lors de la recherche en bdd: ', error);
+    throw error;
+  }
+    
 }
 
 const connectDB = async () => {
@@ -34,10 +41,10 @@ const connectDB = async () => {
         contenu: "Mon contenu1"
       }
     ])*/
-    
+    /*
     console.log(result);
     const reqresult = await Blog.findById("659aacac68b0ba3c805f294a");
-    console.log("trouvé" + reqresult);
+    console.log("trouvé" + reqresult);*/
 
   } catch (error) {
     console.error('Erreur de connexion à MongoDB :', error);
@@ -46,4 +53,4 @@ const connectDB = async () => {
   }
 };
 
-module.exports = connectDB;
+module.exports = { connectDB, findBlog };
