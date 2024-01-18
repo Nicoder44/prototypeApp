@@ -15,6 +15,6 @@ const userSchema = mongoose.Schema({
     genre: String
 });
 
-const model = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = model;
+module.exports = User;

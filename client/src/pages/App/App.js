@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
+import logo from '../../assets/logo.svg';
 import './App.css';
-import LoginForm from './LoginForm';
+import LoginForm from '../../components/LoginForm/LoginForm';
+import Header from '../../components/Header/Header';
 
 const App = () => {
   const [msg, setMsg] = useState('');
@@ -22,8 +23,8 @@ const App = () => {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="App-header">
+        <Header />
         <img src={logo} className="App-logo" alt="logo" />
         {isLoggedIn ? (
           <div>
@@ -39,7 +40,7 @@ const App = () => {
             <LoginForm onLogin={handleLogin} />
           </div>
         )}
-      </header>
+      
     </div>
   );
 };
