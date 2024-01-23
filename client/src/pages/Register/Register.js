@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
+import Header from '../../components/Header/Header';
+import './Register.css'
 
 const Register = () => {
   const [prenom, setPrenom] = useState('');
+  const [nom, setNom] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState("");
+	const [msg, setMsg] = useState("");
 
   const handleAddUser = async () => {
     try {
@@ -11,14 +17,17 @@ const Register = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prenom: prenom, password: password }),
+        body: JSON.stringify({ prenom: prenom, nom: nom, email: email, password: password }),
       });
+      setMsg(response.message);
 
       const data = await response.json();
 
       if (response.ok) {
-        console.log(data.msg); // Message de succès
+        setMsg(data.message);
       } else {
+        setError(data.message);
+        setMsg(''); // Assure-toi de vider le message de succès en cas d'erreur
         console.error('Erreur lors de l\'ajout de l\'utilisateur :', data.msg);
       }
     } catch (error) {
@@ -27,15 +36,25 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h2>Ajouter un utilisateur</h2>
-      <label>Prenom:</label>
-      <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} />
+    <div className="register-page">
+      <Header />
+      <div className='container'>
+        <h2>Ajouter un utilisateur</h2>
+        <label>Prenom:</label>
+        <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} />
 
-      <label>Password:</label>
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <label>Nom:</label>
+        <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} />
 
-      <button onClick={handleAddUser}>Ajouter l'utilisateur</button>
+        <label>Password:</label>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+
+        <label>Mail:</label>
+        <input type="mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+        {error && <div>{error}</div>}
+				{msg && <div>{msg}</div>}
+        <button onClick={handleAddUser}>Ajouter l'utilisateur</button>
+      </div>
     </div>
   );
 };

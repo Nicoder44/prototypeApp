@@ -1,10 +1,14 @@
-const express = require('express')
-const path = require('path')
-require('dotenv').config()
-require('./db/blog')
-require('./db/user')
+const express = require('express');
+const path = require('path');
+require('dotenv').config();
+require('./db/blog');
+require('./db/user');
 const { connectDB, findBlog } = require('./db/db');
-const User = require('./db/user')
+const User = require('./db/user');
+const Token = require('./db/token');
+const sendEmail = require('./utils/sendEmail');
+const crypto = require('crypto');
+const bcrypt = require("bcrypt");
 
 const PORT = process.env.PORT || 5000
 
@@ -24,12 +28,32 @@ app.get('/api/Loveers', (_, res) => {
 
 app.post('/api/users', async (req, res) => {
   try {
-    const { prenom, password } = req.body;
 
-    const newUser = new User({ prenom, password });
-    await newUser.save();
+    let user = await User.findOne({ email: req.body.email });
+		if (user)
+			return res
+				.status(409)
+				.send({ message: "Un utilisateur utilise déjà cette adresse mail." });
 
-    res.status(201).json({ msg: 'Utilisateur ajouté avec succès' });
+    const salt = await bcrypt.genSalt(Number(process.env.SALT));
+		const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+   const { prenom, nom, email, password } = req.body;
+    user = await new User({ ...req.body, password: hashPassword }).save();
+
+    //const newUser = new User({ prenom, nom, email, password });
+    //await newUser.save();
+    const token = await new Token({
+			userId: user._id,
+			token: crypto.randomBytes(32).toString("hex"),
+		}).save();
+		const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
+		await sendEmail(user.email, "Verify Email", url);
+
+		res
+			.status(201)
+			.send({ message: "Un Email de confirmation vous a été envoyé" });
+    
     console.log("Utilisateur ajouté:" + prenom + ", " + password)
   } catch (error) {
     console.error('Erreur lors de l\'ajout de l\'utilisateur :', error);
@@ -63,3 +87,4 @@ app.get('/*', (_, res) => {
 app.listen(PORT, () => {
     console.log(`le serveur est lancé sur le port : ${PORT}`)
 })
+//https://www.youtube.com/watch?v=T6rElSLldyc&ab_channel=CyberWolves
