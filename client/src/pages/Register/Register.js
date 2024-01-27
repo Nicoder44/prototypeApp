@@ -39,21 +39,21 @@ const Register = () => {
     <div className="register-page">
       <Header />
       <div className='container'>
-        <h2>Ajouter un utilisateur</h2>
-        <label>Prenom:</label>
+        <h2>Bienvenue sur PolyLove</h2>
+        <label>Prénom:</label>
         <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} />
 
         <label>Nom:</label>
         <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} />
 
-        <label>Password:</label>
+        <label>Mot de passe:</label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
         <label>Mail:</label>
         <input type="mail" value={email} onChange={(e) => setEmail(e.target.value)} />
         {error && <div>{error}</div>}
 				{msg && <div>{msg}</div>}
-        <button onClick={handleAddUser}>Ajouter l'utilisateur</button>
+        <button onClick={handleAddUser}>S'inscrire !</button>
       </div>
     </div>
   );
