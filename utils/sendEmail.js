@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-module.exports = async(email, subject, text) => {
+module.exports = async(email, subject, text, html) => {
     try{
         const transporter = nodemailer.createTransport({
             host: process.env.HOST,
@@ -14,10 +14,11 @@ module.exports = async(email, subject, text) => {
         });
 
         await transporter.sendMail({
-            from: process.env.USER, 
+            from: '"PolyLove Team" <nmace44@gmail.com>', 
             to: email,
             subject: subject,
-            text: text
+            text: text,
+            html: html
         });
         console.log("Email sent succesfully");
     }

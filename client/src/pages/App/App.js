@@ -1,46 +1,82 @@
 import React, { useState } from 'react';
-import logo from '../../assets/logo.svg';
-import './App.css';
-import LoginForm from '../../components/LoginForm/LoginForm';
+import axios from "axios";
+import styles from "./styles.module.css";
 import Header from '../../components/Header/Header';
+import { Link } from 'react-router-dom';
 
 const App = () => {
-  const [msg, setMsg] = useState('');
-  const [isLoggedIn, setLoggedIn] = useState(false);
 
-  const handleLogin = data => {
-    setMsg(data.msg);
-    setLoggedIn(true);
-  };
+  const [data, setData] = useState({ email: "", password: "" });
+  const [error, setError] = useState(" ");
 
-  const handleClick = async () => {
-    const data = await window.fetch('/api/Loveers');
-    const json = await data.json();
-    const msg = json.msg;
+  const handleChange = ({ currentTarget: input }) => {
+		setData({ ...data, [input.name]: input.value });
+	};
 
-    setMsg(msg);
-    console.log(json);
-  };
+  const handleSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			const url = "http://localhost:5000/auth";
+			const { data: res } = await axios.post(url, data);
+			localStorage.setItem("token", res.data);
+			window.location = "/";
+		} catch (error) {
+			if (
+				error.response &&
+				error.response.status >= 400 &&
+				error.response.status <= 500
+			) {
+				setError(error.response.data.message);
+			}
+      else{
+        setError(error.response.data.message);
+      }
+		}
+	};
+  
 
   return (
-    <div className="App-header">
-        <Header />
-        <img src={logo} className="App-logo" alt="logo" />
-        {isLoggedIn ? (
-          <div>
-            <p>Welcome! You are logged in.</p>
-            <p>{msg}</p>
+    <div>
+      <Header />
+      <div className={styles.login_container}>
+        <div className={styles.login_form_container}>
+          <div className={styles.left}>
+            <form className={styles.form_container} onSubmit={handleSubmit}>
+              <h1>Connecte toi !</h1>
+              <input
+                type="email"
+                placeholder="Email"
+                name="email"
+                onChange={handleChange}
+                value={data.email}
+                required
+                className={styles.input}
+              />
+              <input
+                type="password"
+                placeholder="Mot de passe"
+                name="password"
+                onChange={handleChange}
+                value={data.password}
+                required
+                className={styles.input}
+              />
+              {error && <div className={styles.error_msg}>{error}</div>}
+              <button type="input" className={styles.green_btn}>
+                Se Connecter
+              </button>
+            </form>
           </div>
-        ) : (
-          <div>
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <button onClick={handleClick}>Dis bonjour mec</button>
-            <LoginForm onLogin={handleLogin} />
+          <div className={styles.right}>
+            <h1>Première fois ici ?</h1>
+            <Link to="/register">
+              <button type="button" className={styles.white_btn}>
+                S'inscrire
+              </button>
+            </Link>
           </div>
-        )}
-      
+        </div>
+      </div>
     </div>
   );
 };
