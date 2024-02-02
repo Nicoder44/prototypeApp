@@ -1,4 +1,5 @@
 const express = require('express')
+const User = require('./db/user');
 
 const requireAuth = require('./middleware/requireAuth')
 
@@ -6,8 +7,16 @@ const router = express.Router()
 
 router.use(requireAuth)
 
-router.get('/', async(req, res) => {
-    console.log("ok ca marche")
+router.get('/pickRandomUser', async(req, res) => {
+    const randomUser = await User.aggregate([
+        { $sample: { size: 1 } },
+    ]);
+
+    if (randomUser.length === 0) {
+        return res.status(404).json({ message: 'Aucun utilisateur trouvé.' });
+    }
+
+    res.json(randomUser[0]);
 })
 
 module.exports = router

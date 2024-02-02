@@ -4,7 +4,7 @@ import App from './pages/App/App.js'
 import Account from './pages/Account/index.jsx'
 import Register from './pages/Register/Register.js'
 import reportWebVitals from './reportWebVitals'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import EmailVerify from './pages/EmailVerify/index.jsx'
 import { AuthContextProvider } from './context/AuthContext.js'
 
@@ -30,7 +30,7 @@ const route = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthContextProvider>
-    <RouterProvider router={route} />
+      <RouterProvider router={route} />
   </AuthContextProvider>
 );
 
