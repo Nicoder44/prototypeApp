@@ -71,34 +71,42 @@ app.post('/auth', async (req, res) => {
     const user = await User.findOne({email: req.body.email});
     //console.log(user)
     if (!user)
-			return res.status(401).send({ message: "Invalid Email or Password" });
+			return res.status(401).send({ message: "Oops... L'email ne semble pas exister dans la base de PolyLove !" });
    
     const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
     );
     
-    if (!validPassword)
+    if (!validPassword) {
+      console.log(user.toString() + " tried to connect but entered the wrong password.");
 			return res.status(401).send({ message: "Invalid Email or Password" });
+    }
     
     if (!user.verified) {
+      console.log(user.toString() + " tried to connect but is not yet verified.");
       let token = await Token.findOne({ userId: user._id });
       if (!token) {
         token = await new Token({
           userId: user._id,
           token: crypto.randomBytes(32).toString("hex"),
         }).save();
-        const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
-        await sendEmail(user.email, "Verify Email", url);
+        const url = `${process.env.BASE_URL}users/verify/${user.id}/${token.token}`;
+        const emailText = `Merci de vous être inscrit sur PolyLove. Pour valider votre compte, veuillez cliquer sur le lien suivant : ${url}`;
+        const emailHTML = `<html lang="en"><head><style>body{font-family:'Arial',sans-serif;background-color:#1c1c1c;color:#fff;padding:20px;} .container{max-width:600px;margin:0 auto;background-color:#333;padding:30px;border-radius:10px;box-shadow:0 0 10px rgba(255,0,0,.5);}p.link-paragraph {word-wrap: break-word;max-width:100%;}h1{color:#ff0000;}p{color:#fff;line-height:1.6;}a{display:inline-block;margin-top:20px;padding:10px 20px;background-color:#ff0000;color:#fff;text-decoration:none;border-radius:5px;}footer{margin-top:20px;color:#999;font-size:12px;}</style></head><body><div class="container"><h1>Bienvenue sur PolyLove !</h1><p>Merci de vous être inscrit sur PolyLove. Pour valider votre compte, veuillez cliquer sur le lien ci-dessous :</p><a href="${url}" target="_blank">Valider Mon Compte</a><p>Si le bouton ne fonctionne pas, vous pouvez copier et coller le lien suivant dans votre navigateur :</p><details><summary>lien</summary><p>${url}</p></details><p>Merci de faire partie de la communauté PolyLove !</p></div><footer>Email généré automatiquement par PolyLove. Ne pas répondre à cet e-mail.</footer></body></html>`;
+
+        await sendEmail(user.email, "Validation de compte - PolyLove", emailText, emailHTML);
       }
 
       return res
         .status(400)
-        .send({ message: "An Email sent to your account please verify" });
+        .send({ message: "Votre adresse mail n'est pas vérifiée. Un eMail vous a été renvoyé." });
     }
     
       const token = user.generateAuthToken();
-		  res.status(200).send({ data: token, message: "logged in successfully" });
+      const mail = user.email; const prenom = user.prenom; const nom = user.nom;
+      console.log(user.toString() + " succesfully logged in with the token: " + token);
+		  res.status(200).send({ data: {token, mail, prenom, nom}, message: "logged in successfully" });
 
   } catch(error){
     res.status(500).send({message: "Internal Server Error"});

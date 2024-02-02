@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from "axios";
 import styles from "./styles.module.css";
 import Header from '../../components/Header/Header';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const App = () => {
 
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState({ email: "", password: "" });
   const [error, setError] = useState(" ");
 
@@ -18,8 +20,9 @@ const App = () => {
 		try {
 			const url = "http://localhost:5000/auth";
 			const { data: res } = await axios.post(url, data);
-			localStorage.setItem("token", res.data);
-			window.location = "/";
+			localStorage.setItem("token", JSON.stringify(res.data));
+      dispatch({ type: 'LOGIN', payload: res.data });
+			window.location = "/account";
 		} catch (error) {
 			if (
 				error.response &&
@@ -34,7 +37,6 @@ const App = () => {
 		}
 	};
   
-
   return (
     <div>
       <Header />

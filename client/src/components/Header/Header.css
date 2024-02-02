@@ -12,6 +12,11 @@
   justify-content: space-between;
 }
 
+.textMail{
+  color: #fff;
+  font-family: fantasy;
+}
+
 .logo {
   display: flex;
   align-items: center;

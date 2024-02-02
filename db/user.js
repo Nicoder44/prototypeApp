@@ -36,6 +36,10 @@ userSchema.methods.generateAuthToken = function () {
 	return token;
 };
 
+userSchema.methods.toString = function () {
+    return "[" + this.prenom + " " + this.nom + " (" + this._id + ")]"
+};
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
