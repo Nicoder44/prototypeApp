@@ -11,7 +11,8 @@ const Header = () => {
   const { user } = useAuthContext()
 
   const handleClick = () => {
-    logout()
+    logout();
+    window.location = "/";
   }
 
   const handleToggleMenu = () => {
@@ -28,8 +29,8 @@ const Header = () => {
         <nav className={`nav ${isMenuOpen ? 'show-menu' : ''}`}>
           {user && (
             <div>
-              <span className='textMail'>{user.mail}</span>
-              <button onClick={handleClick}>Log out</button>
+              <span className='textMail'>{user.prenom} {user.nom}</span>
+              <button onClick={handleClick}>Déconnexion</button>
             </div>
           )}
           {!user && (

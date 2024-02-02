@@ -40,6 +40,24 @@ userSchema.methods.toString = function () {
     return "[" + this.prenom + " " + this.nom + " (" + this._id + ")]"
 };
 
+userSchema.pre('save', function (next) {
+    this.prenom = formatPrenom(this.prenom);
+    this.nom = formatNom(this.nom);
+    next();
+});
+
+function formatPrenom(prenom) {
+    return prenom.toLowerCase().replace(/(?:^|\s|-)\S/g, function (match) {
+        return match.toUpperCase();
+    });
+}
+
+function formatNom(nom) {
+    return nom.toLowerCase().replace(/(?:^|\s|-)\S/g, function (match) {
+        return match.toUpperCase();
+    });
+}
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
