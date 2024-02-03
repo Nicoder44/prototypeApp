@@ -8,6 +8,7 @@ const router = express.Router()
 router.use(requireAuth)
 
 router.get('/pickRandomUser', async(req, res) => {
+    
     const randomUser = await User.aggregate([
         { $sample: { size: 1 } },
     ]);
@@ -15,8 +16,10 @@ router.get('/pickRandomUser', async(req, res) => {
     if (randomUser.length === 0) {
         return res.status(404).json({ message: 'Aucun utilisateur trouvé.' });
     }
-
-    res.json(randomUser[0]);
+    console.log(randomUser[0])
+    
+    res.status(200).json(randomUser[0]);
+    
 })
 
 module.exports = router

@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import EmailVerify from './pages/EmailVerify/index.jsx'
 import { AuthContextProvider } from './context/AuthContext.js'
+import { MatchContextProvider } from './context/MatchContext.js'
 
 
 const route = createBrowserRouter([
@@ -30,7 +31,9 @@ const route = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthContextProvider>
+    <MatchContextProvider>
       <RouterProvider router={route} />
+    </MatchContextProvider>
   </AuthContextProvider>
 );
 

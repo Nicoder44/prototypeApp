@@ -1,19 +1,33 @@
-import styles from "./styles.module.css";
-import Header from "../../components/Header/Header";
+import styles from "./styles.module.css"
+import Header from "../../components/Header/Header"
+import { useAuthContext } from "../../hooks/useAuthContext"
+import { useMatchContext } from "../../hooks/useMatchContext"
+
 // Account.js
-import React, { useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
+import React, { useContext, useEffect } from 'react';
 
 const Account = () => {
-  const { user, dispatch } = useContext(AuthContext);
+  const {user} = useAuthContext()
+  const {metUser, dispatch} = useMatchContext()
 
-  const handleLogout = () => {
-    // Effectuez votre logique de déconnexion ici, si nécessaire
-    // ...
+  useEffect(() => {
+    const fetchMet = async() => {
+      const response = await fetch('http://localhost:5000/api/matchs/pickRandomUser', {
+        headers: {'Authorization': `Bearer ${user.token}`},
+      })
 
-    // Dispatchez l'action pour mettre à jour le contexte avec un token null
-    dispatch({ type: 'LOGOUT' });
-  };
+      const json = await response.json()
+
+      if (response.ok) {
+        dispatch({type: 'SET_MET_USER', payload: json})
+      }
+    }
+
+    if(user) {
+      fetchMet()
+    }
+
+  }, [dispatch, user])
 
   return (
     <div>
@@ -23,7 +37,7 @@ const Account = () => {
             <div className={styles.mainDiv}>
             <h2>Bienvenue {user.prenom} !</h2>
             <p>Qui sait ce que le sort vous réserve aujourd'hui ?</p>
-            <button onClick={handleLogout}>Se déconnecter</button>
+            {metUser && <p>{metUser.prenom}</p>}
             </div>
         ) : (
             <div className={styles.divNotConnected}>
