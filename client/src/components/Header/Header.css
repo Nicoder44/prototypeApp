@@ -68,6 +68,17 @@ h1 {
   color: #ff0000;
 }
 
+.nav div {
+  display: flex;
+  align-items: center;
+}
+
+.nav button {
+  margin-right: 10px;
+  width: 130px;
+  /* Ajoutez d'autres styles au besoin */
+}
+
 @media screen and (max-width: 768px) {
   .nav {
     display: none;

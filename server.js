@@ -42,7 +42,7 @@ app.post('/api/users', async (req, res) => {
     const salt = await bcrypt.genSalt(Number(process.env.SALT));
 		const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-    const { prenom, nom, email, password } = req.body;
+    const { prenom, nom } = req.body;
     user = await new User({ ...req.body, password: hashPassword }).save();
 
     const token = await new Token({
@@ -61,7 +61,7 @@ app.post('/api/users', async (req, res) => {
 			.status(201)
 			.send({ message: "Un Email de confirmation vous a été envoyé" });
     
-    console.log("Utilisateur ajouté:" + prenom + ", " + password)
+    console.log("Utilisateur ajouté:" + prenom + ", " + nom)
   } catch (error) {
     console.error('Erreur lors de l\'ajout de l\'utilisateur :', error);
     res.status(500).json({ msg: 'Erreur lors de l\'ajout de l\'utilisateur' });

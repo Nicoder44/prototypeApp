@@ -41,8 +41,8 @@ const Account = () => {
           <div className={styles.mainDiv}>
             <h2>Bienvenue {user.prenom} !</h2>
             <p>Qui sait ce que le sort vous réserve aujourd'hui ?</p>
-            {metUser && <UserCard user={metUser} />}
-            <button onClick={handleFetchNewUser}>Cliquez ici pour un autre utilisateur</button>
+              {metUser ? ( <UserCard user={metUser} handleFetchNewUser={handleFetchNewUser}/>):(
+              <button onClick={handleFetchNewUser}>Commencer à faire des rencontres !</button>)}
           </div>
         ) : (
           <div className={styles.divNotConnected}>

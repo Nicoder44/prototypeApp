@@ -15,6 +15,14 @@ const Header = () => {
     window.location = "/";
   }
 
+  const handleClick2 = () => {
+    window.location = "/monprofil";
+  }
+
+  const handleClick3 = () => {
+    window.location = "/account";
+  }
+
   const handleToggleMenu = () => {
     setMenuOpen(!isMenuOpen);
   };
@@ -30,8 +38,10 @@ const Header = () => {
           {user && (
             <div>
               <span className='textMail'>{user.prenom} {user.nom}</span>
+              <button onClick={handleClick3}>Rencontres</button>
+              <button onClick={handleClick2}>Mon Profil</button>
               <button onClick={handleClick}>Déconnexion</button>
-            </div>
+          </div>
           )}
           {!user && (
           <ul>

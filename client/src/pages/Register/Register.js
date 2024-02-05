@@ -9,6 +9,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState("");
 	const [msg, setMsg] = useState("");
+  const [dateNaissance, setDateNaissance] = useState('');
 
   const handleAddUser = async () => {
     try {
@@ -17,7 +18,7 @@ const Register = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prenom: prenom, nom: nom, email: email, password: password }),
+        body: JSON.stringify({ prenom: prenom, nom: nom, email: email, password: password, dateNaissance: dateNaissance }),
       });
       setMsg(response.message);
 
@@ -51,6 +52,9 @@ const Register = () => {
 
         <label>Mail:</label>
         <input type="mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+
+        <label>Date de naissance:</label>
+        <input type="date" value={dateNaissance} onChange={(e) => setDateNaissance(e.target.value)} />
         {error && <div>{error}</div>}
 				{msg && <div>{msg}</div>}
         <button onClick={handleAddUser}>S'inscrire !</button>

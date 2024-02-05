@@ -26,10 +26,10 @@ const connectDB = async () => {
     });
 
     //const result = await blog.save(blog);
-    const result = await Blog.create({
+    /*const result = await Blog.create({
         titre: "Titre2",
         contenu: "Contenu2"
-    });
+    });*/
     
     /*const result = await Blog.insertMany([
       {

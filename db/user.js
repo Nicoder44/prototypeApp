@@ -25,7 +25,10 @@ const userSchema = mongoose.Schema({
         default: false
     },
     description: String,
-    age: Number,
+    dateNaissance: {
+        type: Date,
+        required: true
+    },
     genre: String
 });
 
@@ -57,6 +60,23 @@ function formatNom(nom) {
         return match.toUpperCase();
     });
 }
+
+userSchema.methods.getAge = function () {
+    if (this.dateNaissance) {
+        const today = new Date();
+        const birthDate = new Date(this.dateNaissance);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        return age;
+    } else {
+        return null; 
+    }
+};
 
 const User = mongoose.model("User", userSchema);
 
