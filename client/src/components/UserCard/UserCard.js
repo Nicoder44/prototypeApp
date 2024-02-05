@@ -4,7 +4,7 @@ import Swipeable from "react-swipy";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faHeartCrack } from '@fortawesome/free-solid-svg-icons'
 
-const UserCard = ({ user, onAccept, handleFetchNewUser }) => {
+const UserCard = ({ user, createMatch, handleFetchNewUser }) => {
   const heart = <FontAwesomeIcon icon={faHeart} />
   const brokenHeart = <FontAwesomeIcon icon={faHeartCrack} />
 
@@ -17,6 +17,7 @@ const UserCard = ({ user, onAccept, handleFetchNewUser }) => {
     if(direction === "right")
     {
       console.log('oui');
+      createMatch()
       handleFetchNewUser()
     }
     else
