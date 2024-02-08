@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
-require('./db/blog');
+//require('./db/blog');
 require('./db/user');
 const { connectDB, findBlog } = require('./db/db');
 const User = require('./db/user');

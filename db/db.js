@@ -1,7 +1,7 @@
 // db/db.js
 
 const mongoose = require('mongoose');
-const Blog = require('./blog');
+//const Blog = require('./blog');
 
 const findBlog = async (Id) => {
   try{
@@ -20,10 +20,10 @@ const connectDB = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connexion réussie à MongoDB');
 
-    const blog = new Blog({
+   /* const blog = new Blog({
         titre: "Titre1",
         contenu: "Contenu1"
-    });
+    });*/
 
     //const result = await blog.save(blog);
     /*const result = await Blog.create({

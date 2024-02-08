@@ -10,6 +10,7 @@ const Register = () => {
   const [error, setError] = useState("");
 	const [msg, setMsg] = useState("");
   const [dateNaissance, setDateNaissance] = useState('');
+  const [gender, setGender] = useState('homme');
 
   const handleAddUser = async () => {
     try {
@@ -18,7 +19,7 @@ const Register = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prenom: prenom, nom: nom, email: email, password: password, dateNaissance: dateNaissance }),
+        body: JSON.stringify({ prenom: prenom, nom: nom, email: email, password: password, dateNaissance: dateNaissance, gender: gender }),
       });
       setMsg(response.message);
 
@@ -52,6 +53,15 @@ const Register = () => {
 
         <label>Mail:</label>
         <input type="mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+
+        <label>
+          Genre:
+          <select value={gender} onChange={(e) => setGender(e.target.value)}>
+            <option value="homme">Homme</option>
+            <option value="femme">Femme</option>
+            <option value="non-binaire">Non binaire</option>
+          </select>
+        </label>
 
         <label>Date de naissance:</label>
         <input type="date" value={dateNaissance} onChange={(e) => setDateNaissance(e.target.value)} />

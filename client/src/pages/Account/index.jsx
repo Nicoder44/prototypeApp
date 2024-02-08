@@ -11,6 +11,7 @@ const Account = () => {
   const { metUser, dispatch } = useMatchContext();
   const [fetchNewUser, setFetchNewUser] = useState(false);
   const [fetchCreateMatch, setCreateMatch] = useState(false);
+  const [msg, setMsg] = useState("");
 
   useEffect(() => {
     const fetchMet = async () => {
@@ -69,15 +70,19 @@ const Account = () => {
     setCreateMatch(true);
   };
 
+  const handleSetMsg = (message) => {
+    setMsg(message);
+  }
+
   return (
     <div>
       <Header />
       <div>
         {user ? (
           <div className={styles.mainDiv}>
-            <h2>Bienvenue {user.prenom} !</h2>
-            <p>Qui sait ce que le sort vous réserve aujourd'hui ?</p>
-              {metUser ? ( <UserCard user={metUser} createMatch={handleCreateMatch} handleFetchNewUser={handleFetchNewUser}/>):(
+            <div className={styles.butter}>Bienvenue {user.prenom} !</div>
+            <div className={styles.pe}>{msg ? (msg):('Qui sait ce que le sort vous réserve aujourd\'hui ?')}</div>
+              {metUser ? ( <UserCard user={metUser} handleSetMsg={handleSetMsg} createMatch={handleCreateMatch} handleFetchNewUser={handleFetchNewUser}/>):(
               <button onClick={handleFetchNewUser}>Commencer à faire des rencontres !</button>)}
           </div>
         ) : (

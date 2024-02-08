@@ -6,8 +6,9 @@ import axios from "axios";
 
 const ProfileSettings = () => {
   const { user } = useAuthContext();
-  const [profileImage, setProfileImage] = useState();
+  const [profileImage, setProfileImage] = useState(null);
   const [description, setDescription] = useState('');
+  const [msg, setMsg] = useState("");
 
   useEffect(() => {
     
@@ -21,7 +22,14 @@ const ProfileSettings = () => {
     e.preventDefault()
     try {
       const formdata = new FormData()
-      formdata.append('profileImage', profileImage)
+      if(profileImage != null)
+      {
+        formdata.append('profileImage', profileImage)
+      }
+      if(description != '')
+      {
+        formdata.append('description', description)
+      }
       formdata.append('user', JSON.stringify(user))
       const response = await axios.post(
         'http://localhost:5000/api/matchs/updateProfile',
@@ -31,7 +39,7 @@ const ProfileSettings = () => {
         }
       );
 
-      console.log(response.data);
+      setMsg(response.data.message);
     } catch (error) {
       console.error('Erreur lors de la requête vers userMatched', error);
     }
@@ -61,6 +69,7 @@ const ProfileSettings = () => {
                 <button type="submit" className={styles.green_btn}>
                   Enregistrer
                 </button>
+                {msg ? (msg):("")}
               </form>
             </div>
           </div>

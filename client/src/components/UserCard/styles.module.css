@@ -2,11 +2,12 @@
 
 .userCard {
   position: relative; /* Ajout de position relative */
-  height: 70vh;
+  height: 60vh;
   aspect-ratio: 2 / 3;
   perspective: 1000px;
   perspective-origin: center 50%;
   transform-style: preserve-3d;
+  width: fit-content;
 }
 
 .userFooter {
@@ -21,8 +22,8 @@
 
 .userPhoto {
   width: 100%;
-  height: 75vw; /* Ajustez la hauteur en fonction du ratio 4:3 */
-  max-height: 600px; /* Limitez la hauteur si nécessaire */
+  max-height: calc(100vh - 60px); 
+  min-height: 200px;
   overflow: hidden;
 }
 
@@ -30,6 +31,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
 .userFooter button {
@@ -54,4 +57,27 @@
   margin-left: auto; /* Alignez le bouton supérieur gauche */
   margin-right: 40%;
   margin-top: 20px;
+}
+
+
+.butter {
+  font-family: Verdana, sans-serif;
+  color: #1f1f1f;
+  font-size: large;
+}
+
+.description {
+  color: rgb(49, 49, 49);
+}
+
+.userHeader {
+  position: absolute;
+  bottom: 5%;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }

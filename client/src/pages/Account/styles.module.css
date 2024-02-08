@@ -5,3 +5,41 @@
 .mainDiv{
     margin-top: 40%;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Chettan+2&family=Calligraffitti&display=swap');
+
+@import url('https://fonts.cdnfonts.com/css/petit-formal-script');
+
+.butter {
+  font-family: 'Calligraffitti', cursive;
+  font-weight: 700;
+  font-size: 4rem;
+  text-shadow: -15px 5px 20px #ced0d3;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #F9f1cc;
+  text-shadow: 5px 5px 0px #FFB650, 
+  3.33px 3.33px 0px #FFD662,
+  5px 5px 0px #FF80BF,
+  6.67px 6.67px 0px #EF5097,
+  8.33px 8.33px 0px #6868AC,
+  10px 10px 0px #90B1E0;
+}
+
+@media screen and (max-width: 768px) {
+    .butter {
+        font-size: 1.5rem;
+    }
+
+    .pe {
+        font-size: 8px;
+    }
+}
+
+.pe {
+    font-family: 'Petit Formal Script', sans-serif;
+    color: #fff;
+    font-weight: 1000;
+    font-size: 18px;
+    text-align: center;
+}

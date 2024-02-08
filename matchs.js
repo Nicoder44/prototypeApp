@@ -45,13 +45,16 @@ router.post('/pickRandomUser', async(req, res) => {
 router.post('/updateProfile', upload.single('profileImage'), async(req, res) => {
   //console.log(req.file)
   //console.log(req.user)
+  console.log(req.body)
   try {
     const user = await User.findOne(req.user._id)
     //console.log(user)
+
+    user.description = req.body.description;
     user.profileImage = req.file.filename;
     await user.save();
 
-    return res.status(200).json({ message: 'Image mise à jour' });
+    return res.status(200).json({ message: 'Profil mis à jour' });
   } catch (error) {
     return res.status(401).json({ message: 'Erreur, nous ne trouvons pas votre compte' });
   }
@@ -75,7 +78,6 @@ router.post('/userMatched', async (req, res) => {
       });
 
       if (existingMatch) {
-        // Si un match existe, mettre à jour matchAccepted si c'est l'utilisateur attendu
         if (existingMatch.Liked.equals(fulluser._id)) {
           existingMatch.matchAccepted = true;
           await existingMatch.save();

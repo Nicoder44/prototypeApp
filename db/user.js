@@ -24,13 +24,19 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    description: String,
+    description: {
+        type: String,
+    },
     profileImage: { type: String },
     dateNaissance: {
         type: Date,
         required: true
     },
-    genre: String
+    gender: {
+        type: String,
+        enum: ['homme', 'femme', 'non-binaire'],
+        required: true
+      },
 });
 
 userSchema.methods.generateAuthToken = function () {
