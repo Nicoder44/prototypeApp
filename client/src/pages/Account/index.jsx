@@ -14,8 +14,16 @@ const Account = () => {
 
   useEffect(() => {
     const fetchMet = async () => {
+
+      const data = {mail : user.mail}
+
       const response = await fetch('http://localhost:5000/api/matchs/pickRandomUser', {
-        headers: { 'Authorization': `Bearer ${user.token}` },
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${user.token}`,
+          'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(data)
       });
 
       const json = await response.json();

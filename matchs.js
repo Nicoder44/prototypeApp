@@ -1,14 +1,33 @@
 const express = require('express')
 const User = require('./db/user');
 const Match = require('./db/match')
+const multer = require('multer')
+const path = require('path')
 
 const requireAuth = require('./middleware/requireAuth')
 
 const router = express.Router()
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './userImages')
+  }, 
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + req.user._id + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({
+  storage: storage
+})
+
+
 router.use(requireAuth)
 
-router.get('/pickRandomUser', async(req, res) => {
+router.post('/pickRandomUser', async(req, res) => {
+
+    //const user = req.body;
+    //console.log(user)
     
     const randomUser = await User.aggregate([
         { $sample: { size: 1 } },
@@ -22,6 +41,21 @@ router.get('/pickRandomUser', async(req, res) => {
     res.status(200).json(randomUser[0]);
     
 })
+
+router.post('/updateProfile', upload.single('profileImage'), async(req, res) => {
+  //console.log(req.file)
+  //console.log(req.user)
+  try {
+    const user = await User.findOne(req.user._id)
+    //console.log(user)
+    user.profileImage = req.file.filename;
+    await user.save();
+
+    return res.status(200).json({ message: 'Image mise à jour' });
+  } catch (error) {
+    return res.status(401).json({ message: 'Erreur, nous ne trouvons pas votre compte' });
+  }
+});
 
 router.post('/userMatched', async (req, res) => {
 

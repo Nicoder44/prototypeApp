@@ -25,6 +25,8 @@ app.use(express.static('client/build'))
 
 app.use('/api/matchs', matchRoutes);
 
+app.use('/images', express.static('./userImages'));
+
 app.get('/api/Loveers', (_, res) => {
     res.send({
         msg: 'Hello to the World !'

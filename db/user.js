@@ -25,6 +25,7 @@ const userSchema = mongoose.Schema({
         default: false
     },
     description: String,
+    profileImage: { type: String },
     dateNaissance: {
         type: Date,
         required: true

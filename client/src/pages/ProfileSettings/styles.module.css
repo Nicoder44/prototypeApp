@@ -53,7 +53,17 @@ h1 {
   
   /* Personnalisation de l'input de type file */
   .form_container input[type="file"] {
-    display: none;
+    border: 2px solid gray;
+    color: rgb(255, 175, 175);
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .form_container input #file-upload-button {
+    color: bisque;
   }
   
   .upload-btn-wrapper {
@@ -77,7 +87,7 @@ h1 {
     position: absolute;
     left: 0;
     top: 0;
-    opacity: 0;
+    opacity: 1;
   }
   
   .upload-btn-wrapper .custom-file-upload {

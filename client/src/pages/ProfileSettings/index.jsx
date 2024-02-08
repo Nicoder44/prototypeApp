@@ -2,28 +2,41 @@ import styles from "./styles.module.css";
 import Header from "../../components/Header/Header";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 
 const ProfileSettings = () => {
   const { user } = useAuthContext();
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState();
   const [description, setDescription] = useState('');
 
   useEffect(() => {
     
   }, [ user ]);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setProfileImage(file);
-  };
-
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    try {
+      const formdata = new FormData()
+      formdata.append('profileImage', profileImage)
+      formdata.append('user', JSON.stringify(user))
+      const response = await axios.post(
+        'http://localhost:5000/api/matchs/updateProfile',
+        formdata,
+        {
+          headers: { 'Authorization': `Bearer ${user.token}` },
+        }
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.error('Erreur lors de la requête vers userMatched', error);
+    }
   };
+
 
   return (
     <div>
@@ -38,8 +51,7 @@ const ProfileSettings = () => {
                 <div>
                   <label>Nouvelle Photo de Profil:</label>
                   <div className="upload-btn-wrapper">
-                    <button className="btn">Choisir un fichier</button>
-                    <input type="file" accept="image/*" onChange={handleImageChange} />
+                    <input type="file" accept="image/*" onChange={e => setProfileImage(e.target.files[0])} />
                   </div>
                 </div>
                 <div>

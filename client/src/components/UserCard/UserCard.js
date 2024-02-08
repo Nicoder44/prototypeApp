@@ -64,7 +64,7 @@ const UserCard = ({ user, createMatch, handleFetchNewUser }) => {
           <h3>{user.prenom} {user.nom.charAt(0)}.  {getAge()} ans</h3>
         </div>
         <div className={styles.userPhoto}>
-          <img src="https://via.placeholder.com/300" alt={`${user.prenom} ${user.nom}`} draggable="false"/>
+          <img src={user.profileImage ? ("http://localhost:5000/images/"+user.profileImage):("http://localhost:5000/images/images.jpg")} alt={`${user.prenom} ${user.nom}`} draggable="false"/>
         </div>
       </div>
     </Swipeable>
