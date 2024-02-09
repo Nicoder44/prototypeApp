@@ -26,14 +26,14 @@ const Account = () => {
       }
       console.log(lastMet2Users)
       data = {mail : user.mail, gender : user.gender, lastMet2Users}
-      
+
       const response = await fetch('http://localhost:5000/api/matchs/pickRandomUser', {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${user.token}`,
           'Content-Type': 'application/json'
          },
-         
+
          body: JSON.stringify(data)
       });
 
@@ -111,5 +111,4 @@ const Account = () => {
     </div>
   );
 };
-
 export default Account;
