@@ -18,13 +18,13 @@ const Account = () => {
     const fetchMet = async () => {
 
       let data = {}
-      console.log(lastMetUsers)
+      //console.log(lastMetUsers)
       let lastMet2Users = lastMetUsers
       if(metUser)
       {
           lastMet2Users = lastMetUsers.map(lastMetUser => lastMetUser)
       }
-      console.log(lastMet2Users)
+      //console.log(lastMet2Users)
       data = {mail : user.mail, gender : user.gender, lastMet2Users}
 
       const response = await fetch('http://localhost:5000/api/matchs/pickRandomUser', {
@@ -47,7 +47,7 @@ const Account = () => {
         }
         updatedLastMetUsers.unshift(json.email);
         setLastMetUsers(updatedLastMetUsers);
-        //console.log(lastMetUsers)
+        //console.log(response)
       }
     };
 
@@ -62,6 +62,13 @@ const Account = () => {
         );
 
         console.log(response.data);
+        if ('MatchWith' in response.data) {
+            setMsg('C\'est un match !❤️')
+            dispatch({ type: 'CREATE_MATCH', payload: response.data.MatchWith });
+        }
+        
+        
+
       } catch (error) {
         console.error('Erreur lors de la requête vers userMatched', error);
       }

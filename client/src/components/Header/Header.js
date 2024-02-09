@@ -23,6 +23,10 @@ const Header = () => {
     window.location = "/account";
   }
 
+  const handleClick4 = () => {
+    window.location = "/chat";
+  }
+
   const handleToggleMenu = () => {
     setMenuOpen(!isMenuOpen);
   };
@@ -34,10 +38,11 @@ const Header = () => {
           <FaHeart className="heart-icon" />
           <h1>Polylove</h1>
         </div>
-        <nav className={`nav ${isMenuOpen ? 'show-menu' : ''}`}>
+        <nav className={`nav ${isMenuOpen ? 'show-menu vertical-menu' : ''}`}>
           {user && (
             <div>
               <span className='textMail'>{user.prenom} {user.nom}</span>
+              <button onClick={handleClick4}>Matchs</button>
               <button onClick={handleClick3}>Rencontres</button>
               <button onClick={handleClick2}>Mon Profil</button>
               <button onClick={handleClick}>Déconnexion</button>

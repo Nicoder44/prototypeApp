@@ -92,11 +92,11 @@ router.post('/userMatched', async (req, res) => {
       });
 
       if (existingMatch) {
-        if (existingMatch.Liked.equals(fulluser._id)) {
+        if (existingMatch.Liked.equals(fulluser._id) || existingMatch.matchAccepted) {
           existingMatch.matchAccepted = true;
           await existingMatch.save();
           console.log('Match accepté');
-          return res.status(200).json({ message: 'Match accepté' });
+          return res.status(200).json({ message: 'Match accepté', MatchWith: metUser  });
         }
         else
         {

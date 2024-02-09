@@ -1,0 +1,33 @@
+.sentMessage {
+    background-color: #fd8080;
+    color: white;
+    border-radius: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-left: auto; /* Aligner à droite */
+    max-width: 70%; /* Limiter la largeur */
+    word-wrap: break-word; /* Gérer les longs messages */
+    margin-top: 2px;
+}
+
+.receivedMessage {
+    background-color: lightgray;
+    color: black;
+    border-radius: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-right: auto; /* Aligner à gauche */
+    max-width: 70%; /* Limiter la largeur */
+    word-wrap: break-word; /* Gérer les longs messages */
+    margin-top: 2px;
+}
+
+.chatContainer {
+    /* Autres styles */
+    width: 80%; /* Augmenter la largeur maximale */
+    margin: auto; /* Centrer la zone de discussion */
+}

@@ -1,5 +1,5 @@
 // MatchContext.js
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer, useEffect } from 'react';
 
 export const MatchContext = createContext();
 
@@ -8,8 +8,12 @@ export const matchReducer = (state, action) => {
     case 'SET_MET_USER':
       return { ...state, metUser: action.payload };
     case 'CREATE_MATCH':
-      return { ...state, matches: [...state.matches, action.payload] };
-    // Ajoutez d'autres types d'action selon vos besoins
+      const existingMatch = state.matches.find(match => match._id === action.payload._id);
+      if (existingMatch) {
+        return state; 
+      } else {
+        return { ...state, matches: [...state.matches, action.payload] };
+      }
     default:
       return state;
   }
@@ -18,7 +22,20 @@ export const matchReducer = (state, action) => {
 export const MatchContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(matchReducer, {
     metUser: null,
+    matches: []
   });
+
+  useEffect(() => {
+    const tokenData = JSON.parse(localStorage.getItem('token'));
+    
+
+    if (tokenData) {
+      const matcheds = tokenData.matchedUsers;
+      for(const user of matcheds){
+        dispatch({ type: 'CREATE_MATCH', payload: user })
+      } 
+    }
+    }, [])
 
 
   console.log('MatchContext state:', state);
