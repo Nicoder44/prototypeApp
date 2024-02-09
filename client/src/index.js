@@ -9,6 +9,7 @@ import EmailVerify from './pages/EmailVerify/index.jsx'
 import { AuthContextProvider } from './context/AuthContext.js'
 import { MatchContextProvider } from './context/MatchContext.js'
 import ProfileSettings from './pages/ProfileSettings/index.jsx'
+import Chat from './pages/Chat/index.jsx'
 
 
 const route = createBrowserRouter([
@@ -19,6 +20,10 @@ const route = createBrowserRouter([
   {
     path: "account",
     element: <Account />
+  },
+  {
+    path: "chat",
+    element: <Chat />
   },
   {
     path: "monprofil",

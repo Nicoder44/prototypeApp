@@ -12,10 +12,15 @@ const crypto = require('crypto');
 const bcrypt = require("bcrypt");
 const cors = require("cors");
 const matchRoutes = require("./matchs.js");
+const http = require('http')
+
 
 const PORT = process.env.PORT || 5000
 
 const app = express()
+
+const server2 = http.createServer(app);
+
 
 connectDB();
 
@@ -33,6 +38,26 @@ app.get('/api/Loveers', (_, res) => {
         msg: 'Hello to the World !'
     })
 })
+
+const server = app.listen(PORT, () => {
+  console.log(`le serveur est lancé sur le port : ${PORT}`)
+})
+
+const io = require('socket.io')(server);
+
+io.on('connection', (socket) => {
+    console.log(`Socket ${socket.id} connected`)
+
+    socket.on('sendMessage', (message) => {
+      io.emit('message', message);
+    });
+  
+    socket.on('disconnect', () => {
+      console.log(`Socket ${socket.id} disconnected`);
+    });
+})
+
+
 
 app.post('/api/users', async (req, res) => {
   try {
@@ -179,6 +204,4 @@ app.get('/*', (_, res) => {
     res.sendFile(path.join(__dirname, './client/build/index.html'))
 })
 
-app.listen(PORT, () => {
-    console.log(`le serveur est lancé sur le port : ${PORT}`)
-})
+
