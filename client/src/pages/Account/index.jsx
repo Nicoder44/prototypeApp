@@ -47,7 +47,7 @@ const Account = () => {
         }
         updatedLastMetUsers.unshift(json.email);
         setLastMetUsers(updatedLastMetUsers);
-        //console.log(lastMetUsers)
+        //console.log(response)
       }
     };
 
@@ -62,6 +62,13 @@ const Account = () => {
         );
 
         console.log(response.data);
+        if ('MatchWith' in response.data) {
+            setMsg('C\'est un match !❤️')
+            dispatch({ type: 'CREATE_MATCH', payload: response.data.MatchWith });
+        }
+        
+        
+
       } catch (error) {
         console.error('Erreur lors de la requête vers userMatched', error);
       }

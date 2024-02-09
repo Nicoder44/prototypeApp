@@ -5,6 +5,7 @@ require('dotenv').config();
 require('./db/user');
 const { connectDB } = require('./db/db');
 const User = require('./db/user');
+const Match = require('./db/match.js')
 const Token = require('./db/token');
 const sendEmail = require('./utils/sendEmail');
 const crypto = require('crypto');
@@ -109,9 +110,44 @@ app.post('/auth', async (req, res) => {
     }
     
       const token = user.generateAuthToken();
+
+    
+      const existingMatches = await Match.find({
+        $or: [
+          { Liker: user._id, matchAccepted: true },
+          { Liked: user._id, matchAccepted: true }
+        ]
+      });
+      
+      let matchedUsersIds = [];
+
+      for (const match of existingMatches) {
+        if (match.Liker.equals(user._id)) {
+          matchedUsersIds.push(match.Liked);
+        } else if (match.Liked.equals(user._id)) {
+          matchedUsersIds.push(match.Liker);
+        }
+      }
+      
+      let matchedUsers = [];  
+
+      for (const userId of matchedUsersIds) {
+        try {
+          const user = await User.findById(userId);
+          if (user) {
+            matchedUsers.push(user);
+          }
+        } catch (error) {
+          console.error(`Erreur lors de la recherche de l'utilisateur avec l'ID ${userId}:`, error);
+        }
+      }
+      
+      console.log(matchedUsers);
+
+
       const mail = user.email; const prenom = user.prenom; const nom = user.nom; const gender = user.gender;
       console.log(user.toString() + " succesfully logged in with the token: " + token);
-		  res.status(200).send({ data: {token, mail, prenom, nom, gender}, message: "logged in successfully" });
+		  res.status(200).send({ data: {token, mail, prenom, nom, gender, matchedUsers}, message: "logged in successfully" });
 
   } catch(error){
     res.status(500).send({message: "Internal Server Error"});

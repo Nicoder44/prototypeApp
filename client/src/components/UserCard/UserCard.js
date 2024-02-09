@@ -39,7 +39,7 @@ const UserCard = ({ user, createMatch, handleFetchNewUser, handleSetMsg }) => {
     "Beurk !",
     "Au secours !",
     "Trop vieux...",
-    "Tu crois que tu valais mieux que lui ??",
+    "Tu crois que tu vaux mieux que lui ??",
     "Pas mon genre !",
     "Sérieusement ?",
     "Next !",
