@@ -7,6 +7,7 @@ const { connectDB } = require('./db/db');
 const User = require('./db/user');
 const Match = require('./db/match.js')
 const Token = require('./db/token');
+const Msg = require('./db/msg.js')
 const sendEmail = require('./utils/sendEmail');
 const crypto = require('crypto');
 const bcrypt = require("bcrypt");
@@ -45,16 +46,71 @@ const server = app.listen(PORT, () => {
 
 const io = require('socket.io')(server);
 
-io.on('connection', (socket) => {
-    console.log(`Socket ${socket.id} connected`)
+const userSockets = {};
 
-    socket.on('sendMessage', (message) => {
-      io.emit('message', message);
-    });
-  
-    socket.on('disconnect', () => {
-      console.log(`Socket ${socket.id} disconnected`);
-    });
+io.on('connection', (socket) => {
+console.log(`Socket ${socket.id} connected`)
+
+socket.on('joinChat', async ({ownChat, chatWith}) => {
+  try {
+    // Recherche des messages entre ownChat et chatWith
+    const messages = await Msg.find({
+        $or: [
+            { sender: ownChat, receiver: chatWith },
+            { sender: chatWith, receiver: ownChat }
+        ]
+    }).sort({ timestanmp: 1 }); // Tri par date croissante
+
+    socket.emit('chatHistory', messages);
+    
+    // Enregistrer la socket de l'utilisateur dans la structure de données
+    userSockets[ownChat] = socket;
+    console.log(`User ${ownChat} joined chat`);
+    } catch (error) {
+    console.error('Erreur lors de la récupération de l\'historique de chat:', error);
+}
+});
+
+socket.on('sendMessage', async ({ senderId, receiverId, message }) => {
+  console.log(`Received message from ${senderId} to ${receiverId}: ${message}`);
+
+  try {
+      // Recherchez la conversation entre l'expéditeur et le destinataire
+      const existingMessages = await Msg.find({
+          $or: [
+              { sender: senderId, receiver: receiverId },
+              { sender: receiverId, receiver: senderId }
+          ]
+      }).sort({ timestamp: 1 }); // Triez par ordre croissant de timestamp pour obtenir les messages les plus anciens en premier
+
+      // Vérifiez le nombre de messages dans la conversation
+      if (existingMessages.length >= 10) {
+          // Si le nombre de messages dépasse 10, supprimez le message le plus ancien
+          await Msg.findByIdAndDelete(existingMessages[0]._id);
+      }
+
+      // Enregistrez le nouveau message
+      const newMessage = await new Msg({
+          sender: senderId,
+          receiver: receiverId,
+          content: message
+      }).save();
+
+      // Diffusez le message au destinataire
+      const receiverSocket = userSockets[receiverId];
+      if (receiverSocket) {
+          receiverSocket.emit('message', { senderId, message });
+      } else {
+          console.log(`User ${receiverId} is not connected`);
+      }
+  } catch (error) {
+      console.error('Error while saving message:', error);
+  }
+});
+
+socket.on('disconnect', () => {
+  console.log(`Socket ${socket.id} disconnected`);
+});
 })
 
 
@@ -170,9 +226,9 @@ app.post('/auth', async (req, res) => {
       console.log(matchedUsers);
 
 
-      const mail = user.email; const prenom = user.prenom; const nom = user.nom; const gender = user.gender;
+      const mail = user.email; const prenom = user.prenom; const nom = user.nom; const gender = user.gender; const _id = user._id;
       console.log(user.toString() + " succesfully logged in with the token: " + token);
-		  res.status(200).send({ data: {token, mail, prenom, nom, gender, matchedUsers}, message: "logged in successfully" });
+		  res.status(200).send({ data: {token, mail, prenom, nom, gender, matchedUsers, _id}, message: "logged in successfully" });
 
   } catch(error){
     res.status(500).send({message: "Internal Server Error"});
