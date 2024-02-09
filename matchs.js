@@ -26,13 +26,28 @@ router.use(requireAuth)
 
 router.post('/pickRandomUser', async(req, res) => {
 
-    //const user = req.body;
-    //console.log(user)
-    
-    const randomUser = await User.aggregate([
+    const user = req.body;
+    console.log(user)
+    let randomUser = 0;
+    if(user.gender === 'homme'){
+      randomUser = await User.aggregate([
+        { $match: { gender: "femme", email: { $nin: user.lastMet2Users } } },
         { $sample: { size: 1 } },
     ]);
-
+    }
+    else if(user.gender === 'femme'){
+      randomUser = await User.aggregate([
+        { $match: { gender: "homme", email: { $nin: user.lastMet2Users }} },
+        { $sample: { size: 1 } },
+    ]);
+    }
+    else{
+      randomUser = await User.aggregate([
+        { $match: { email: { $nin: user.lastMet2Users }} },
+        { $sample: { size: 1 } },
+    ]);
+    }
+    
     if (randomUser.length === 0) {
         return res.status(404).json({ message: 'Aucun utilisateur trouvé.' });
     }
@@ -49,7 +64,6 @@ router.post('/updateProfile', upload.single('profileImage'), async(req, res) => 
   try {
     const user = await User.findOne(req.user._id)
     //console.log(user)
-
     user.description = req.body.description;
     user.profileImage = req.file.filename;
     await user.save();

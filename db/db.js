@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 //const Blog = require('./blog');
 
-const findBlog = async (Id) => {
+/*const findBlog = async (Id) => {
   try{
     const reqresult = await Blog.findById(Id);
     console.log(reqresult);
@@ -13,7 +13,7 @@ const findBlog = async (Id) => {
     throw error;
   }
     
-}
+}*/
 
 const connectDB = async () => {
   try {
@@ -53,4 +53,4 @@ const connectDB = async () => {
   }
 };
 
-module.exports = { connectDB, findBlog };
+module.exports = { connectDB };

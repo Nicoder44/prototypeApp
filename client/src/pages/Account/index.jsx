@@ -12,18 +12,28 @@ const Account = () => {
   const [fetchNewUser, setFetchNewUser] = useState(false);
   const [fetchCreateMatch, setCreateMatch] = useState(false);
   const [msg, setMsg] = useState("");
+  const [lastMetUsers, setLastMetUsers] = useState([]);
 
   useEffect(() => {
     const fetchMet = async () => {
 
-      const data = {mail : user.mail}
-
+      let data = {}
+      console.log(lastMetUsers)
+      let lastMet2Users = lastMetUsers
+      if(metUser)
+      {
+          lastMet2Users = lastMetUsers.map(lastMetUser => lastMetUser)
+      }
+      console.log(lastMet2Users)
+      data = {mail : user.mail, gender : user.gender, lastMet2Users}
+      
       const response = await fetch('http://localhost:5000/api/matchs/pickRandomUser', {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${user.token}`,
           'Content-Type': 'application/json'
          },
+         
          body: JSON.stringify(data)
       });
 
@@ -31,6 +41,13 @@ const Account = () => {
 
       if (response.ok) {
         dispatch({ type: 'SET_MET_USER', payload: json });
+        const updatedLastMetUsers = [...lastMetUsers];
+        if (lastMetUsers.length >= 5) {
+          updatedLastMetUsers.pop();
+        }
+        updatedLastMetUsers.unshift(json.email);
+        setLastMetUsers(updatedLastMetUsers);
+        //console.log(lastMetUsers)
       }
     };
 

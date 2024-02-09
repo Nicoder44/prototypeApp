@@ -3,7 +3,7 @@ const path = require('path');
 require('dotenv').config();
 //require('./db/blog');
 require('./db/user');
-const { connectDB, findBlog } = require('./db/db');
+const { connectDB } = require('./db/db');
 const User = require('./db/user');
 const Token = require('./db/token');
 const sendEmail = require('./utils/sendEmail');
@@ -109,9 +109,9 @@ app.post('/auth', async (req, res) => {
     }
     
       const token = user.generateAuthToken();
-      const mail = user.email; const prenom = user.prenom; const nom = user.nom;
+      const mail = user.email; const prenom = user.prenom; const nom = user.nom; const gender = user.gender;
       console.log(user.toString() + " succesfully logged in with the token: " + token);
-		  res.status(200).send({ data: {token, mail, prenom, nom}, message: "logged in successfully" });
+		  res.status(200).send({ data: {token, mail, prenom, nom, gender}, message: "logged in successfully" });
 
   } catch(error){
     res.status(500).send({message: "Internal Server Error"});
